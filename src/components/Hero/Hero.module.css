@@ -1,0 +1,59 @@
+.hero {
+    padding: 60px 0;
+    background: var(--color-bg);
+}
+
+.content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.title {
+    font-size: 60px;
+    font-weight: var(--font-weight-medium);
+    line-height: 1em;
+    color: var(--color-text-dark);
+    max-width: 947px;
+    flex: 1 1 auto;
+    margin: 0;
+    padding-top: 0;
+}
+
+.badge {
+    position: relative;
+    width: 288px;
+    height: 102px;
+    background-color: var(--color-primary-green-light);
+    border-radius: 5px;
+    padding: 16px 20px;
+    box-sizing: border-box;
+    opacity: 1;
+    overflow: visible;
+    flex-shrink: 0;
+    margin-top: 0;
+}
+
+.badgeText {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 32px;
+    line-height: 110%;
+    letter-spacing: 0px;
+    font-variant-numeric: lining-nums proportional-nums;
+    color: var(--color-text-gray);
+    margin: 0;
+    text-align: left;
+}
+
+.badgeArrow {
+    position: absolute;
+    left: 117px;
+    bottom: -15px;
+    width: 30.24px;
+    height: 35.17px;
+    object-fit: contain;
+    display: block;
+}

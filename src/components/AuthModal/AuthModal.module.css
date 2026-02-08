@@ -1,0 +1,122 @@
+.authModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.authModalVisible {
+    display: flex !important;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.container {
+    position: relative;
+    background-color: var(--color-white);
+    border-radius: 30px;
+    padding: 40px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    z-index: 1001;
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 34px;
+}
+
+.fields {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.field {
+    width: 100%;
+    position: relative;
+}
+
+.input {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1px solid var(--color-text-light);
+    border-radius: 8px;
+    font-family: var(--font-family);
+    font-size: 18px;
+    font-weight: var(--font-weight-normal);
+    line-height: 1.1;
+    color: var(--color-text-dark);
+    background-color: var(--color-white);
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.input::placeholder {
+    color: var(--color-text-light);
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--color-primary-green);
+}
+
+.inputError,
+.field:has(.inputError) .input {
+    border-color: #DB0030;
+}
+
+.error {
+    display: none;
+    margin-top: 10px;
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: var(--font-weight-normal);
+    line-height: 1.1;
+    color: #DB0030;
+    text-align: center;
+}
+
+.errorVisible {
+    display: block;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

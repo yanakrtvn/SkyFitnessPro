@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import AuthModal from './components/AuthModal/AuthModal';
+
+// Заглушки для тестирования
+const HomePage = ({ onOpenAuth }) => (
+  <div>
+    <h1>Home Page</h1>
+    <button onClick={onOpenAuth}>Open Auth</button>
+  </div>
+);
+
+const LoginPage = () => <h1>Login Page</h1>;
+const CoursePage = ({ onOpenAuth }) => <h1>Course Page</h1>;
+const CourseWorkoutsPage = ({ onOpenAuth }) => <h1>Course Workouts Page</h1>;
+const ProfilePage = ({ onOpenAuth }) => <h1>Profile Page</h1>;
+const WorkoutPage = ({ onOpenAuth }) => <h1>Workout Page</h1>;
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes>
+        <Route 
+          path="/" 
+          element={<HomePage onOpenAuth={() => setAuthModalOpen(true)} />} 
+        />
+        <Route path="/login" element={<LoginPage />} />
+        <Route 
+          path="/course/:id" 
+          element={<CoursePage onOpenAuth={() => setAuthModalOpen(true)} />} 
+        />
+        <Route 
+          path="/course/:courseId/workouts" 
+          element={<CourseWorkoutsPage onOpenAuth={() => setAuthModalOpen(true)} />} 
+        />
+        <Route 
+          path="/profile" 
+          element={<ProfilePage onOpenAuth={() => setAuthModalOpen(true)} />} 
+        />
+        <Route 
+          path="/course/:courseId/workout/:workoutId" 
+          element={<WorkoutPage onOpenAuth={() => setAuthModalOpen(true)} />} 
+        />
+      </Routes>
+      <AuthModal 
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+      />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

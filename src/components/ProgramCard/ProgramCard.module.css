@@ -1,0 +1,130 @@
+.programCard {
+    background: var(--color-white);
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.3s, box-shadow 0.3s;
+    padding: 0 0 15px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-card-gap);
+    align-items: center;
+}
+
+.programCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.image {
+    position: relative;
+    width: 100%;
+    height: 325px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 20px;
+}
+
+.addBtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-white);
+    border: none;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--color-text-dark);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+    z-index: 10;
+}
+
+.addBtn:hover {
+    transform: scale(1.1);
+}
+
+.addBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.info {
+    padding: 0 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.1;
+    color: var(--color-text-dark);
+    width: 300px;
+    margin: 0;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-self: stretch;
+}
+
+.detailRow {
+    display: flex;
+    gap: 6px;
+    align-self: stretch;
+}
+
+.detailItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    background-color: var(--color-bg-light);
+    border-radius: 50px;
+    font-size: 16px;
+    line-height: 1.1;
+    color: var(--color-text-gray);
+}
+
+.detailItem span {
+    font-family: var(--font-family);
+    font-size: 16px;
+    font-weight: var(--font-weight-normal);
+    line-height: 1.1;
+    color: var(--color-text-gray);
+}
+
+.detailIcon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--color-text-gray);
+    stroke: currentColor;
+    fill: none;
+}
+
+.detailItem svg[fill="#FFFFFF"] {
+    fill: var(--color-white);
+    stroke: none;
+}

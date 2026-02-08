@@ -1,0 +1,17 @@
+.programs {
+    padding: 60px 0 100px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: var(--spacing-card-gap);
+}
+
+.scrollTopBtn {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    justify-self: center;
+    margin-top: 40px;
+}

@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-primary-green: #99D100;
+    --color-primary-green-light: #BCEC30;
+    --color-primary-blue: #00C1FF;
+    --color-text-dark: #000000;
+    --color-text-gray: #202020;
+    --color-text-light: #D0CECE;
+    --color-white: #FFFFFF;
+    --color-bg: rgba(250, 250, 250, 1);
+    --color-bg-light: #F7F7F7;
+    
+    --color-card-yoga: #FFC700;
+    --color-card-stretching: #2491D2;
+    --color-card-fitness: #F7A012;
+    --color-card-step: #FF7E65;
+    --color-card-bodyflex: #7D458C;
+    
+    --shadow-card: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
+    
+    --spacing-container: 140px;
+    --spacing-card-gap: 24px;
+    
+    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: var(--color-text-dark);
+    background-color: var(--color-bg);
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 140px;
+}
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 26px;
+    border: none;
+    border-radius: 46px;
+    font-family: var(--font-family);
+    font-size: 18px;
+    font-weight: var(--font-weight-normal);
+    line-height: 1.1;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+
+.btn--primary {
+    background-color: var(--color-primary-green-light);
+    color: var(--color-text-dark);
+}
+
+.btn--primary:hover {
+    background-color: var(--color-primary-green);
+}
+
+.btn--secondary {
+    background-color: transparent;
+    color: var(--color-text-dark);
+    border: 1px solid var(--color-text-dark);
+}
+
+.btn--secondary:hover {
+    background-color: var(--color-bg);
+}
+
+.btn--full {
+    width: 100%;
+}
+
+.main {
+    min-height: calc(100vh - 200px);
+}
