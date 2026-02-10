@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Logo from '../Logo/Logo';
+import { useState } from 'react';
+import Logo from '../../components/Logo/Logo';
 import { useAuth } from '../../hooks/useAuth';
-import styles from './AuthModal.module.css';
+import { useNavigate } from 'react-router-dom';
+import styles from './AuthPage.module.css';
 
-const AuthModal = ({ isOpen, onClose }) => {
+const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,29 +13,6 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { login, register } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-      setError('');
-      setEmail('');
-      setPassword('');
-      setPasswordConfirm('');
-      setIsLogin(true);
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -51,11 +28,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     setLoading(false);
 
     if (result.success) {
-      onClose();
-      
-      setTimeout(() => {
-        navigate('/profile');
-      }, 100);
+      navigate('/');
     } else {
       setError(result.error);
     }
@@ -85,13 +58,10 @@ const AuthModal = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className={`${styles.authModal} ${styles.authModalVisible}`}>
-      <div className={styles.overlay} onClick={onClose}></div>
-      <div className={styles.container}>
-        <div className={styles.logo}>
+    <div className={styles.authPage}>
+      <div className={styles.authContainer}>
+        <div className={styles.authLogo}>
           <Logo />
         </div>
 
@@ -193,4 +163,4 @@ const AuthModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default AuthModal;
+export default LoginPage;
