@@ -1,0 +1,117 @@
+.page {
+  padding: 40px 0 60px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 8px 0;
+  border: none;
+  background: none;
+  font-family: var(--font-family);
+  font-size: 16px;
+  color: var(--color-primary-green);
+  cursor: pointer;
+}
+
+.backBtn:hover {
+  text-decoration: underline;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-dark);
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: var(--color-text-light);
+  margin: 0 0 32px 0;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  padding: 40px 0;
+  font-size: 18px;
+  color: var(--color-text-dark);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.item {
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 24px;
+  border: none;
+  border-radius: 20px;
+  background: var(--color-white);
+  box-shadow: var(--shadow-card);
+  font-family: var(--font-family);
+  text-align: left;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0px 8px 24px -8px rgba(0, 0, 0, 0.2);
+}
+
+.cardTitle {
+  flex: 1;
+  font-size: 20px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-dark);
+}
+
+.progress {
+  font-size: 16px;
+  color: var(--color-text-light);
+}
+
+.arrow {
+  font-size: 24px;
+  color: var(--color-primary-green);
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 28px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .card {
+    flex-wrap: wrap;
+    padding: 20px;
+  }
+
+  .cardTitle {
+    width: 100%;
+    font-size: 18px;
+  }
+
+  .progress {
+    font-size: 14px;
+  }
+}
