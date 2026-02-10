@@ -4,7 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import styles from './AuthPage.module.css';
 
-const LoginPage = () => {
+const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -163,4 +163,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default AuthPage;

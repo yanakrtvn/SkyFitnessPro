@@ -8,7 +8,7 @@ import { getCourseWorkouts, getWorkoutById } from '../../api/workouts.api';
 import { getCourseProgress, calculateWorkoutProgress } from '../../api/progress.api';
 import styles from './WorkoutsPage.module.css';
 
-const CourseWorkoutsPage = ({ onOpenAuth }) => {
+const WorkoutsPage = ({ onOpenAuth }) => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const { loading: authLoading } = useAuth();
@@ -187,4 +187,4 @@ const CourseWorkoutsPage = ({ onOpenAuth }) => {
   );
 };
 
-export default CourseWorkoutsPage;
+export default WorkoutsPage;

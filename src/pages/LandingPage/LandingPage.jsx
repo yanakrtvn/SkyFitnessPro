@@ -2,7 +2,7 @@ import Header from '../../components/Header/Header';
 import Hero from '../../components/Hero/Hero';
 import Programs from '../../components/Programs/Programs';
 
-const HomePage = ({ onOpenAuth }) => {
+const LandingPage = ({ onOpenAuth }) => {
   return (
     <>
       <Header onOpenAuth={onOpenAuth} />
@@ -14,4 +14,4 @@ const HomePage = ({ onOpenAuth }) => {
   );
 };
 
-export default HomePage;
+export default LandingPage;

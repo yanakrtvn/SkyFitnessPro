@@ -8,7 +8,7 @@ import { getWorkoutById, getCourseWorkouts } from '../../api/workouts.api';
 import { getUserProgress, calculateWorkoutProgress, resetProgress } from '../../api/progress.api';
 import styles from './AccountPage.module.css';
 
-const ProfilePage = ({ onOpenAuth }) => {
+const AccountPage = ({ onOpenAuth }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const [userCourses, setUserCourses] = useState([]);
@@ -385,4 +385,4 @@ const ProfilePage = ({ onOpenAuth }) => {
   );
 };
 
-export default ProfilePage;
+export default AccountPage;

@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { findCourseByTitle, addUserCourse } from '../../api/courses.api';
 import styles from './ProgramPage.module.css';
 
-const CoursePage = ({ onOpenAuth }) => {
+const ProgramPage = ({ onOpenAuth }) => {
   const { id } = useParams();
   const { isAuthenticated } = useAuth();
   const [isAdding, setIsAdding] = useState(false);
@@ -231,4 +231,4 @@ const CoursePage = ({ onOpenAuth }) => {
   );
 };
 
-export default CoursePage;
+export default ProgramPage;
