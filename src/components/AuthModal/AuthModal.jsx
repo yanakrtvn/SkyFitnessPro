@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../Logo/Logo';
-import { useAuth } from '../../hooks/useAuth';
+// import { useAuth } from '../../hooks/useAuth';
 import styles from './AuthModal.module.css';
 
 const AuthModal = ({ isOpen, onClose }) => {
@@ -11,7 +11,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, register } = useAuth();
+  // const { login, register } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {

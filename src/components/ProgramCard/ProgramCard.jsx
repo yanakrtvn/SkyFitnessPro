@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { findCourseByTitle, addUserCourse } from '../../api/courses.api';
+import { findCourseByTitle, addUserCourse } from '../../api/coursesApi';
 import styles from './ProgramCard.module.css';
 
 const ProgramCard = ({ program, onOpenAuth }) => {
