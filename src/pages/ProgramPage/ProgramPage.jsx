@@ -3,7 +3,7 @@ import { getProgramById } from '../../data/programs';
 import { useAuth } from '../../hooks/useAuth';
 import Header from '../../components/Header/Header';
 import { useState, useEffect } from 'react';
-import { findCourseByTitle, addUserCourse } from '../../api/courses.api';
+import { findCourseByTitle, addUserCourse } from '../../api/courses/CourseService';
 import styles from './ProgramPage.module.css';
 
 const ProgramPage = ({ onOpenAuth }) => {

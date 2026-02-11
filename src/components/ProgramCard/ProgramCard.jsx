@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { findCourseByTitle, addUserCourse } from '../../api/courses.api';
+import { findCourseByTitle, addUserCourse } from '../../api/courses/CourseService';
 import styles from './ProgramCard.module.css';
 
 const ProgramCard = ({ program, onOpenAuth }) => {
@@ -31,14 +31,13 @@ const ProgramCard = ({ program, onOpenAuth }) => {
       const findResult = await findCourseByTitle(program.title);
       
       if (!findResult.success || !findResult.data) {
-        const errorMessage = findResult.error || 'Не удалось найти курс в системе';
-        alert(`${errorMessage}. Попробуйте перейти на страницу курса для добавления.`);
+        alert('Не удалось найти курс в системе. Попробуйте позже.');
         setIsAdding(false);
         return;
       }
 
       const apiCourseId = findResult.data._id;
-      
+
       const result = await addUserCourse(apiCourseId);
       
       if (result.success || result.isDuplicate) {
@@ -59,7 +58,8 @@ const ProgramCard = ({ program, onOpenAuth }) => {
         alert(result.error || 'Не удалось добавить курс. Попробуйте еще раз.');
       }
     } catch (error) {
-      alert('Произошла ошибка при добавлении курса. Попробуйте еще раз.');
+      console.error('Ошибка при добавлении курса:', error);
+      alert('Произошла ошибка. Попробуйте еще раз.');
     } finally {
       setIsAdding(false);
     }

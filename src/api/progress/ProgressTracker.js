@@ -1,5 +1,5 @@
-import { get, patch } from './apiClient';
-import { getWorkoutById } from './workouts.api';
+import api from '../core/FitApi';
+const { get, patch } = api;
 
 export const getCourseProgress = async (courseId) => {
   try {
@@ -12,7 +12,7 @@ export const getCourseProgress = async (courseId) => {
     console.error('Ошибка получения прогресса курса:', error);
     return {
       success: false,
-      error: error.message || 'Не удалось загрузить прогресс по курсу',
+      error: error.userMessage || 'Не удалось загрузить прогресс по курсу',
     };
   }
 };
@@ -28,7 +28,7 @@ export const getUserProgress = async (courseId, workoutId) => {
     console.error('Ошибка получения прогресса пользователя:', error);
     return {
       success: false,
-      error: error.message || 'Не удалось загрузить прогресс',
+      error: error.userMessage || 'Не удалось загрузить прогресс',
     };
   }
 };
@@ -53,7 +53,7 @@ export const saveProgress = async (courseId, workoutId, progressData) => {
     console.error('Ошибка сохранения прогресса:', error);
     return {
       success: false,
-      error: error.message || 'Не удалось сохранить прогресс',
+      error: error.userMessage || 'Не удалось сохранить прогресс',
     };
   }
 };
@@ -78,7 +78,7 @@ export const resetProgress = async (courseId, workoutId) => {
     console.error('Ошибка сброса прогресса:', error);
     return {
       success: false,
-      error: error.message || 'Не удалось сбросить прогресс',
+      error: error.userMessage || 'Не удалось сбросить прогресс',
     };
   }
 };
@@ -110,40 +110,30 @@ export const calculateWorkoutProgress = (progressData, exercises) => {
 
 export const calculateCourseProgress = async (courseId) => {
   try {
-    const [workoutsResult, progressResult] = await Promise.all([
-      import('./workouts.api').then(module => module.getCourseWorkouts(courseId)),
-      getCourseProgress(courseId)
-    ]);
+    const progressResult = await getCourseProgress(courseId);
     
-    if (!workoutsResult.success || !workoutsResult.data || workoutsResult.data.length === 0) {
+    if (!progressResult.success || !progressResult.data) {
       return 0;
     }
 
-    const workouts = workoutsResult.data;
-    const progressMap = progressResult.success ? progressResult.data?.workoutsProgress || [] : [];
-
-    let totalProgress = 0;
-    let validWorkouts = 0;
-
-    for (const workout of workouts) {
-      try {
-        const workoutProgress = progressMap.find(p => p.workoutId === workout._id);
-        const workoutDetailResult = await getWorkoutById(workout._id);
-
-        if (workoutDetailResult.success && workoutDetailResult.data?.exercises) {
-          const progressPercent = calculateWorkoutProgress(
-            workoutProgress,
-            workoutDetailResult.data.exercises
-          );
-          totalProgress += progressPercent;
-          validWorkouts++;
-        }
-      } catch (error) {
-        console.error(`Ошибка расчета прогресса тренировки ${workout._id}:`, error);
-      }
+    const progressMap = progressResult.data.workoutsProgress || [];
+    
+    if (progressMap.length === 0) {
+      return 0;
     }
 
-    return validWorkouts > 0 ? Math.round(totalProgress / validWorkouts) : 0;
+    const hasProgress = progressMap.some(p => 
+      p.progressData && p.progressData.some(val => val > 0)
+    );
+    
+    const completedWorkouts = progressMap.filter(p => p.workoutCompleted).length;
+    
+    if (completedWorkouts === progressMap.length) {
+      return 100;
+    }
+
+    return hasProgress ? 50 : 0;
+    
   } catch (error) {
     console.error('Ошибка расчета прогресса курса:', error);
     return 0;

@@ -1,4 +1,6 @@
-import { get } from './apiClient';
+import api from '../core/FitApi';
+const { get } = api;
+
 
 export const getWorkoutById = async (workoutId) => {
   try {
