@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import Header from '../../components/Header/Header';
 import { getProgramById } from '../../data/programs';
-import { findCourseByTitle } from '../../api/courses.api';
-import { getCourseWorkouts, getWorkoutById } from '../../api/workouts.api';
-import { getCourseProgress, calculateWorkoutProgress } from '../../api/progress.api';
+import { findCourseByTitle } from '../../api/courses/CourseService';
+import { getCourseWorkouts, getWorkoutById } from '../../api/workouts/WorkoutService';
+import { getCourseProgress, calculateWorkoutProgress } from '../../api/progress/ProgressTracker';
 import styles from './WorkoutsPage.module.css';
 
 const WorkoutsPage = ({ onOpenAuth }) => {

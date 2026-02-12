@@ -5,9 +5,9 @@ import Header from '../../components/Header/Header';
 import ProgressModal from '../../components/ProgressModal/ProgressModal';
 import SuccessModal from '../../components/SuccessModal/SuccessModal';
 import { getProgramById } from '../../data/programs';
-import { findCourseByTitle } from '../../api/courses.api';
-import { getWorkoutById } from '../../api/workouts.api';
-import { getUserProgress, saveProgress, resetProgress } from '../../api/progress.api';
+import { findCourseByTitle } from '../../api/courses/CourseService';
+import { getWorkoutById } from '../../api/workouts/WorkoutService';
+import { getUserProgress, saveProgress, resetProgress } from '../../api/progress/ProgressTracker';
 import styles from './TrainingPage.module.css';
 
 const TrainingPage = ({ onOpenAuth }) => {
