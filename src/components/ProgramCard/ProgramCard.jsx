@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import { useNotification } from '../../context/NotificationContext';
 import { findCourseByTitle, addUserCourse } from '../../api/courses/CourseService';
 import styles from './ProgramCard.module.css';
 
 const ProgramCard = ({ program, onOpenAuth }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { showSuccess, showError, showInfo } = useNotification();
   const [isAdding, setIsAdding] = useState(false);
 
   const handleCardClick = () => {
@@ -17,10 +19,9 @@ const ProgramCard = ({ program, onOpenAuth }) => {
     e.stopPropagation();
     
     if (!isAuthenticated) {
+      showInfo('Войдите в систему, чтобы добавить курс');
       if (onOpenAuth) {
         onOpenAuth();
-      } else {
-        navigate(`/course/${program.id}`);
       }
       return;
     }
@@ -31,7 +32,7 @@ const ProgramCard = ({ program, onOpenAuth }) => {
       const findResult = await findCourseByTitle(program.title);
       
       if (!findResult.success || !findResult.data) {
-        alert('Не удалось найти курс в системе. Попробуйте позже.');
+        showError('Не удалось найти курс в системе. Попробуйте позже.');
         setIsAdding(false);
         return;
       }
@@ -50,16 +51,16 @@ const ProgramCard = ({ program, onOpenAuth }) => {
         }
         
         if (result.isDuplicate) {
-          alert('Курс уже был добавлен!');
+          showInfo('Курс уже был добавлен ранее!');
         } else {
-          alert('Курс успешно добавлен!');
+          showSuccess('Курс успешно добавлен в вашу коллекцию!');
         }
       } else {
-        alert(result.error || 'Не удалось добавить курс. Попробуйте еще раз.');
+        showError(result.error || 'Не удалось добавить курс. Попробуйте еще раз.');
       }
     } catch (error) {
       console.error('Ошибка при добавлении курса:', error);
-      alert('Произошла ошибка. Попробуйте еще раз.');
+      showError('Произошла ошибка. Попробуйте еще раз.');
     } finally {
       setIsAdding(false);
     }

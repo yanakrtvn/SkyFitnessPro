@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { NotificationProvider } from './context/NotificationContext';
 import LandingPage from './pages/LandingPage/LandingPage';
 import AuthPage from './pages/AuthPage/AuthPage';
 import ProgramPage from './pages/ProgramPage/ProgramPage';
@@ -12,7 +13,7 @@ function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
   return (
-    <>
+    <NotificationProvider>
       <Routes>
         <Route 
           path="/" 
@@ -40,7 +41,7 @@ function App() {
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
       />
-    </>
+    </NotificationProvider>
   );
 }
 

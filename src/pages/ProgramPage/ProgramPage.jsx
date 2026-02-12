@@ -3,6 +3,7 @@ import { getProgramById } from '../../data/programs';
 import { useAuth } from '../../hooks/useAuth';
 import Header from '../../components/Header/Header';
 import { useState, useEffect } from 'react';
+import { useNotification } from '../../context/NotificationContext';
 import { findCourseByTitle, addUserCourse } from '../../api/courses/CourseService';
 import styles from './ProgramPage.module.css';
 
@@ -12,6 +13,7 @@ const ProgramPage = ({ onOpenAuth }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [userCourses, setUserCourses] = useState([]);
   const [apiCourseId, setApiCourseId] = useState(null);
+  const { showAlert, showInfo, showError, showSuccess } = useNotification();
 
   const program = getProgramById(id);
 
@@ -66,14 +68,15 @@ const ProgramPage = ({ onOpenAuth }) => {
 
   const hasCourse = apiCourseId ? userCourses.includes(apiCourseId) : false;
 
-  const handleAddCourse = async () => {
+   const handleAddCourse = async () => {
     if (!isAuthenticated) {
       onOpenAuth();
+      showInfo('Войдите в систему, чтобы добавить курс'); // Добавить уведомление
       return;
     }
 
     if (!apiCourseId) {
-      alert('Не удалось найти курс в системе. Попробуйте обновить страницу.');
+      showError('Не удалось найти курс в системе. Попробуйте обновить страницу.'); // Замена alert
       return;
     }
 
@@ -89,12 +92,12 @@ const ProgramPage = ({ onOpenAuth }) => {
       }
       
       if (result.isDuplicate) {
-        alert('Курс уже был добавлен!');
+        showInfo('Курс уже был добавлен ранее!'); // Замена alert
       } else {
-        alert('Курс успешно добавлен!');
+        showSuccess('Курс успешно добавлен в вашу коллекцию!'); // Замена alert
       }
     } else {
-      alert(result.error || 'Не удалось добавить курс. Попробуйте еще раз.');
+      showError(result.error || 'Не удалось добавить курс. Попробуйте еще раз.'); // Замена alert
     }
     
     setIsAdding(false);

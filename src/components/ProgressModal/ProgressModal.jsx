@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useNotification } from '../../context/NotificationContext';
 import styles from './ProgressModal.module.css';
 
 const ProgressModal = ({ isOpen, onClose, exercises, currentProgress, onSave }) => {
   const [progressData, setProgressData] = useState([]);
+  const { showError } = useNotification();
 
   useEffect(() => {
     if (isOpen && exercises) {
@@ -27,12 +29,12 @@ const ProgressModal = ({ isOpen, onClose, exercises, currentProgress, onSave }) 
 
   const handleSave = async () => {
     if (!exercises || exercises.length === 0) {
-      alert('Нет упражнений для сохранения');
+      showError('Нет упражнений для сохранения');
       return;
     }
 
     if (progressData.length !== exercises.length) {
-      alert(`Ошибка: количество значений прогресса (${progressData.length}) не совпадает с количеством упражнений (${exercises.length})`);
+      showError(`Ошибка: количество значений прогресса (${progressData.length}) не совпадает с количеством упражнений (${exercises.length})`);
       return;
     }
 

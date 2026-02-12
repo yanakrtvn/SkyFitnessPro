@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../Logo/Logo';
 import { useAuth } from '../../hooks/useAuth';
+import { useNotification } from '../../context/NotificationContext'
 import styles from './AuthModal.module.css';
 
 const AuthModal = ({ isOpen, onClose }) => {
@@ -13,6 +14,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { login, register } = useAuth();
   const navigate = useNavigate();
+  const { showSuccess, showError } = useNotification();
 
   useEffect(() => {
     if (isOpen) {
@@ -75,7 +77,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     setLoading(false);
 
     if (result.success) {
-      alert('Регистрация прошла успешно! Теперь войдите в систему.');
+      showSuccess('Регистрация прошла успешно! Теперь войдите в систему.')
       setIsLogin(true);
       setPassword('');
       setPasswordConfirm('');

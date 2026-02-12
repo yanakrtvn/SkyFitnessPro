@@ -9,8 +9,10 @@ import { findCourseByTitle } from '../../api/courses/CourseService';
 import { getWorkoutById } from '../../api/workouts/WorkoutService';
 import { getUserProgress, saveProgress, resetProgress } from '../../api/progress/ProgressTracker';
 import styles from './TrainingPage.module.css';
+import { useNotification } from '../../context/NotificationContext';
 
 const TrainingPage = ({ onOpenAuth }) => {
+  const { showSuccess, showError, showAlert } = useNotification();
   const { courseId, workoutId } = useParams();
   const { loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -144,17 +146,17 @@ const TrainingPage = ({ onOpenAuth }) => {
 
   const handleSaveProgress = async (progressData) => {
     if (!apiCourseId || !workoutId) {
-      alert('Ошибка: не удалось определить курс или тренировку');
+      showError('Не удалось определить курс или тренировку');
       return;
     }
 
     if (!exercises || exercises.length === 0) {
-      alert('Ошибка: нет упражнений для сохранения прогресса');
+      showError('Нет упражнений для сохранения прогресса');
       return;
     }
 
     if (progressData.length !== exercises.length) {
-      alert(`Ошибка: количество значений прогресса (${progressData.length}) не совпадает с количество упражнений (${exercises.length})`);
+      showError(`Количество значений прогресса не совпадает с количеством упражнений`);
       return;
     }
 
@@ -169,29 +171,35 @@ const TrainingPage = ({ onOpenAuth }) => {
       await fetchUserProgress();
       setSuccessModalOpen(true);
     } else {
-      alert(result.error || 'Не удалось сохранить прогресс');
+      showError(result.error || 'Не удалось сохранить прогресс');
     }
   };
 
   const handleResetProgress = async () => {
     if (!apiCourseId || !workoutId) {
-      alert('Ошибка: не удалось определить курс или тренировку');
+      showError('Не удалось определить курс или тренировку');
       return;
     }
 
-    if (!window.confirm('Вы уверены, что хотите удалить весь прогресс по этой тренировке?')) {
-      return;
-    }
-
-    const result = await resetProgress(apiCourseId, workoutId);
-    
-    if (result.success) {
-      await fetchUserProgress();
-      setSuccessModalOpen(true);
-    } else {
-      alert(result.error || 'Не удалось удалить прогресс');
-    }
+    showAlert({
+      title: 'Сбросить прогресс?',
+      message: 'Вы уверены, что хотите удалить весь прогресс по этой тренировке? Это действие нельзя отменить.',
+      type: 'danger',
+      confirmText: 'Сбросить',
+      cancelText: 'Отмена',
+      onConfirm: async () => {
+        const result = await resetProgress(apiCourseId, workoutId);
+        
+        if (result.success) {
+          await fetchUserProgress();
+          showSuccess('Прогресс успешно сброшен!');
+        } else {
+          showError(result.error || 'Не удалось сбросить прогресс');
+        }
+      }
+    });
   };
+
 
   return (
     <>
