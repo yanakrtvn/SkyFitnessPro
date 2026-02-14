@@ -120,3 +120,52 @@
     flex-direction: column;
     gap: 10px;
 }
+
+
+@media (max-width: 480px) {
+    .container {
+        padding: 30px 20px;
+        border-radius: 20px;
+        max-width: calc(100% - 32px);
+    }
+    
+    .form {
+        gap: 24px;
+    }
+    
+    .input {
+        padding: 14px 16px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 375px) {
+    .container {
+        padding: 24px 16px;
+        border-radius: 20px;
+        max-width: calc(100% - 32px);
+        gap: 32px;
+    }
+    
+    .form {
+        gap: 20px;
+    }
+    
+    .fields {
+        gap: 8px;
+    }
+    
+    .input {
+        padding: 14px 16px;
+        font-size: 16px;
+    }
+    
+    .error {
+        font-size: 12px;
+        margin-top: 8px;
+    }
+    
+    .actions {
+        gap: 8px;
+    }
+}

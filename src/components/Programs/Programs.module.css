@@ -15,3 +15,46 @@
     justify-self: center;
     margin-top: 40px;
 }
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .programs {
+        padding: 40px 0 60px;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+    
+    .scrollTopBtn {
+        grid-column: 1;
+        grid-row: auto;
+        align-self: flex-end;
+        justify-self: flex-end;
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .programs {
+        padding: 24px 0 40px;
+    }
+}
+
+@media (max-width: 375px) {
+    .programs {
+        padding: 20px 0 32px;
+    }
+    
+    .grid {
+        gap: 20px;
+    }
+}

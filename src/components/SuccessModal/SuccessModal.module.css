@@ -65,3 +65,31 @@
     align-items: center;
     justify-content: center;
 }
+
+@media (max-width: 768px) {
+    .container {
+        padding: 40px 30px;
+        margin: 20px;
+    }
+
+    .text {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 375px) {
+    .container {
+        padding: 40px 30px;
+        margin: 16px;
+        max-width: 343px;
+    }
+    
+    .text {
+        font-size: 32px;
+    }
+    
+    .icon {
+        width: 68px;
+        height: 68px;
+    }
+}
