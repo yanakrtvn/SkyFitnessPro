@@ -11,3 +11,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.btn--danger {
+  background: linear-gradient(135deg, #FF4757 0%, #FF3838 100%);
+  color: white;
+  border: none;
+}
+
+.btn--danger:hover {
+  background: linear-gradient(135deg, #FF3838 0%, #FF1E1E 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.3);
+}
+
+.btn--danger:active {
+  transform: translateY(0);
+}

@@ -3,6 +3,7 @@ import { getProgramById } from '../../data/programs';
 import { useAuth } from '../../hooks/useAuth';
 import Header from '../../components/Header/Header';
 import { useState, useEffect } from 'react';
+import { useNotification } from '../../context/NotificationContext';
 import { findCourseByTitle, addUserCourse } from '../../api/courses/CourseService';
 import styles from './ProgramPage.module.css';
 
@@ -12,6 +13,7 @@ const ProgramPage = ({ onOpenAuth }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [userCourses, setUserCourses] = useState([]);
   const [apiCourseId, setApiCourseId] = useState(null);
+  const { showAlert, showInfo, showError, showSuccess } = useNotification();
 
   const program = getProgramById(id);
 
@@ -66,39 +68,49 @@ const ProgramPage = ({ onOpenAuth }) => {
 
   const hasCourse = apiCourseId ? userCourses.includes(apiCourseId) : false;
 
-  const handleAddCourse = async () => {
+   const handleAddCourse = async () => {
     if (!isAuthenticated) {
       onOpenAuth();
+      showInfo('Войдите в систему, чтобы добавить курс');
       return;
     }
 
     if (!apiCourseId) {
-      alert('Не удалось найти курс в системе. Попробуйте обновить страницу.');
+      showError('Не удалось найти курс в системе. Попробуйте обновить страницу.');
       return;
     }
 
-    setIsAdding(true);
-    
-    const result = await addUserCourse(apiCourseId);
-    
-    if (result.success || result.isDuplicate) {
-      if (!userCourses.includes(apiCourseId)) {
-        const updatedCourses = [...userCourses, apiCourseId];
-        setUserCourses(updatedCourses);
-        localStorage.setItem('userCourses', JSON.stringify(updatedCourses));
+    showAlert({
+    title: 'Добавить курс?',
+    message: `Добавить курс «${program.title}» в Вашу коллекцию?`,
+    type: 'warning',
+    confirmText: 'Добавить',
+    cancelText: 'Отмена',
+    onConfirm: async () => {
+      setIsAdding(true);
+      
+      const result = await addUserCourse(apiCourseId);
+      
+      if (result.success || result.isDuplicate) {
+        if (!userCourses.includes(apiCourseId)) {
+          const updatedCourses = [...userCourses, apiCourseId];
+          setUserCourses(updatedCourses);
+          localStorage.setItem('userCourses', JSON.stringify(updatedCourses));
+        }
+        
+        if (result.isDuplicate) {
+          showInfo('Курс уже был добавлен ранее!');
+        } else {
+          showSuccess('Курс успешно добавлен в вашу коллекцию!');
+        }
+      } else {
+        showError(result.error || 'Не удалось добавить курс. Попробуйте еще раз.');
       }
       
-      if (result.isDuplicate) {
-        alert('Курс уже был добавлен!');
-      } else {
-        alert('Курс успешно добавлен!');
-      }
-    } else {
-      alert(result.error || 'Не удалось добавить курс. Попробуйте еще раз.');
+      setIsAdding(false);
     }
-    
-    setIsAdding(false);
-  };
+  });
+};
 
   return (
     <>

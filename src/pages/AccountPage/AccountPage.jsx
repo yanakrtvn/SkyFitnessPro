@@ -6,6 +6,7 @@ import { programs, getProgramById } from '../../data/programs';
 import { getAllCourses, removeUserCourse } from '../../api/courses/CourseService';
 import { calculateCourseProgress } from '../../api/progress/ProgressTracker';
 import styles from './AccountPage.module.css';
+import { useNotification } from '../../context/NotificationContext';
 
 const AccountPage = ({ onOpenAuth }) => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -14,6 +15,7 @@ const AccountPage = ({ onOpenAuth }) => {
   const [loading, setLoading] = useState(true);
   const [allApiCourses, setAllApiCourses] = useState([]);
   const [courseProgress, setCourseProgress] = useState({});
+  const { showAlert, showSuccess, showError } = useNotification();
   
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -26,38 +28,32 @@ const AccountPage = ({ onOpenAuth }) => {
 
     const fetchData = async () => {
       setLoading(true);
-      console.log('🔍 Начинаем загрузку данных профиля...');
       
       try {
         const savedCourseIds = localStorage.getItem('userCourses');
         if (!savedCourseIds) {
-          console.log('У пользователя нет сохраненных курсов');
           setUserCourses([]);
           setLoading(false);
           return;
         }
 
         const courseIds = JSON.parse(savedCourseIds);
-        console.log(`ID сохраненных курсов:`, courseIds);
 
         const allCoursesResult = await getAllCourses(false);
         
         if (allCoursesResult.success && allCoursesResult.data) {
           const allCourses = allCoursesResult.data;
           setAllApiCourses(allCourses);
-          console.log(`✅ Загружено ${allCourses.length} курсов из API`);
           
           const userCoursesData = allCourses.filter(course => 
             courseIds.includes(course._id)
           );
           
-          console.log(`👤 Найдено ${userCoursesData.length} курсов пользователя`);
           setUserCourses(userCoursesData);
           
           const progressPromises = userCoursesData.map(async (course) => {
             try {
               const progress = await calculateCourseProgress(course._id);
-              console.log(`📊 Прогресс курса ${course.nameRU || course._id}: ${progress}%`);
               return { courseId: course._id, progress };
             } catch (error) {
               console.error(`Ошибка прогресса для ${course._id}:`, error);
@@ -75,7 +71,6 @@ const AccountPage = ({ onOpenAuth }) => {
           });
           
           setCourseProgress(progressMap);
-          console.log('Прогресс всех курсов загружен');
         } else {
           console.warn('Не удалось загрузить курсы из API');
           setUserCourses(courseIds.map(id => ({ 
@@ -89,40 +84,68 @@ const AccountPage = ({ onOpenAuth }) => {
         setUserCourses([]);
       } finally {
         setLoading(false);
-        console.log('Загрузка профиля завершена');
       }
     };
 
     fetchData();
   }, [navigate]);
 
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'userCourses') {
+        
+
+        if (e.newValue) {
+          const newCourseIds = JSON.parse(e.newValue);
+
+          const updatedUserCourses = allApiCourses.filter(course => 
+            newCourseIds.includes(course._id)
+          );
+          setUserCourses(updatedUserCourses);
+          
+          const updatedProgress = { ...courseProgress };
+
+        } else {
+          setUserCourses([]);
+        }
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [allApiCourses, courseProgress]);
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
   const handleDeleteCourse = async (courseId) => {
-    if (!window.confirm('Вы уверены, что хотите удалить этот курс?')) {
-      return;
-    }
+    showAlert({
+      title: 'Удалить курс?',
+      message: 'Вы уверены, что хотите удалить этот курс из своей коллекции?',
+      type: 'danger',
+      confirmText: 'Удалить',
+      cancelText: 'Отмена',
+      onConfirm: async () => {
+        const result = await removeUserCourse(courseId);
+        
+        if (result.success) {
+          const updatedCourses = userCourses.filter(course => course._id !== courseId);
+          setUserCourses(updatedCourses);
+          
+          const courseIds = updatedCourses.map(c => c._id);
+          localStorage.setItem('userCourses', JSON.stringify(courseIds));
 
-    const result = await removeUserCourse(courseId);
-    
-    if (result.success) {
-      const updatedCourses = userCourses.filter(course => course._id !== courseId);
-      setUserCourses(updatedCourses);
-      
-      const courseIds = updatedCourses.map(c => c._id);
-      localStorage.setItem('userCourses', JSON.stringify(courseIds));
-
-      const updatedProgress = { ...courseProgress };
-      delete updatedProgress[courseId];
-      setCourseProgress(updatedProgress);
-      
-      alert('Курс успешно удален!');
-    } else {
-      alert(result.error || 'Не удалось удалить курс. Попробуйте еще раз.');
-    }
+          const updatedProgress = { ...courseProgress };
+          delete updatedProgress[courseId];
+          setCourseProgress(updatedProgress);
+          
+          showSuccess('Курс успешно удален!');
+        } else {
+          showError(result.error || 'Не удалось удалить курс. Попробуйте еще раз.');
+        }
+      }
+    });
   };
 
   const handleStartTraining = (courseId) => {

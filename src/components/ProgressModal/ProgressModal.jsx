@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useNotification } from '../../context/NotificationContext';
 import styles from './ProgressModal.module.css';
 
 const ProgressModal = ({ isOpen, onClose, exercises, currentProgress, onSave }) => {
   const [progressData, setProgressData] = useState([]);
+  const { showError } = useNotification();
 
   useEffect(() => {
     if (isOpen && exercises) {
@@ -18,21 +20,20 @@ const ProgressModal = ({ isOpen, onClose, exercises, currentProgress, onSave }) 
     if (value === '' || value === null || value === undefined) {
       newProgress[index] = 0;
     } else {
-      const cleanValue = value.toString().replace(/^0+/, '') || '0';
-      const numValue = parseInt(cleanValue, 10);
-      newProgress[index] = isNaN(numValue) ? 0 : numValue;
-    }
-    setProgressData(newProgress);
-  };
+    const numValue = parseInt(value, 10);
+    newProgress[index] = isNaN(numValue) ? 0 : numValue;
+  }
+  setProgressData(newProgress);
+};
 
   const handleSave = async () => {
     if (!exercises || exercises.length === 0) {
-      alert('Нет упражнений для сохранения');
+      showError('Нет упражнений для сохранения');
       return;
     }
 
     if (progressData.length !== exercises.length) {
-      alert(`Ошибка: количество значений прогресса (${progressData.length}) не совпадает с количеством упражнений (${exercises.length})`);
+      showError(`Ошибка: количество значений прогресса (${progressData.length}) не совпадает с количеством упражнений (${exercises.length})`);
       return;
     }
 

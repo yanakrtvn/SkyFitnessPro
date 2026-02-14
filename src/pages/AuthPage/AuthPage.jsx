@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Logo from '../../components/Logo/Logo';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { useNotification } from '../../context/NotificationContext';
 import styles from './AuthPage.module.css';
 
 const AuthPage = () => {
@@ -13,6 +14,7 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const { login, register } = useAuth();
   const navigate = useNavigate();
+  const { showSuccess, showError } = useNotification();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -48,7 +50,7 @@ const AuthPage = () => {
     setLoading(false);
 
     if (result.success) {
-      alert('Регистрация прошла успешно! Теперь войдите в систему.');
+      showSuccess('Регистрация прошла успешно! Теперь войдите в систему.');
       setIsLogin(true);
       setPassword('');
       setPasswordConfirm('');

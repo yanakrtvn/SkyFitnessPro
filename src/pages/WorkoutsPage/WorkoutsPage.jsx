@@ -40,17 +40,22 @@ const WorkoutsPage = ({ onOpenAuth }) => {
   }, [navigate]);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
       if (!apiCourseId) {
-        setLoading(false);
+        if (isMounted) setLoading(false);
         return;
       }
+
       setLoading(true);
       try {
         const [workoutsResult, progressResult] = await Promise.all([
           getCourseWorkouts(apiCourseId),
           getCourseProgress(apiCourseId),
         ]);
+
+         if (!isMounted) return;
 
         if (!workoutsResult.success || !workoutsResult.data) {
           setLoading(false);
@@ -79,14 +84,18 @@ const WorkoutsPage = ({ onOpenAuth }) => {
           setWorkoutProgress(progressMap);
         }
       } catch (error) {
-        console.error(error);
+        if (isMounted) console.error(error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchData();
-  }, [apiCourseId]);
+  
+    return () => {
+      isMounted = false;
+    };
+}, [apiCourseId]);
 
   if (authLoading) {
     return (

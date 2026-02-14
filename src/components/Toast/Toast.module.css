@@ -1,0 +1,90 @@
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  min-width: 300px;
+  max-width: 400px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: slideIn 0.3s ease-out;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.success {
+  background: linear-gradient(135deg, #99D100 0%, #7CB305 100%);
+  color: white;
+}
+
+.toast.error {
+  background: linear-gradient(135deg, #FF4757 0%, #FF3838 100%);
+  color: white;
+}
+
+.toast.warning {
+  background: linear-gradient(135deg, #FFA502 0%, #FF7F00 100%);
+  color: white;
+}
+
+.toast.info {
+  background: linear-gradient(135deg, #2D73FF 0%, #1B5CFE 100%);
+  color: white;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.message {
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 12px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
