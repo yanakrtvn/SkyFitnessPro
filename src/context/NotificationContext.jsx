@@ -26,7 +26,8 @@ export const NotificationProvider = ({ children }) => {
     confirmText: 'Да',
     cancelText: 'Отмена',
     type: 'warning',
-    onConfirm: () => {}
+    onConfirm: () => {},
+    onCancel: () => {}
   });
 
   const showToast = useCallback((message, type = 'info') => {
@@ -59,7 +60,8 @@ export const NotificationProvider = ({ children }) => {
     confirmText = 'Да',
     cancelText = 'Отмена',
     type = 'warning',
-    onConfirm
+    onConfirm,
+    onCancel
   }) => {
     setAlert({
       isOpen: true,
@@ -68,7 +70,8 @@ export const NotificationProvider = ({ children }) => {
       confirmText,
       cancelText,
       type,
-      onConfirm: onConfirm || (() => {})
+      onConfirm: onConfirm || (() => {}),
+      onCancel: onCancel || (() => {})
     });
   }, []);
 
@@ -99,13 +102,19 @@ export const NotificationProvider = ({ children }) => {
       />
       <AlertModal
         isOpen={alert.isOpen}
-        onClose={hideAlert}
+        onClose={() => {
+          alert.onCancel?.();
+          hideAlert();
+        }}
         title={alert.title}
         message={alert.message}
         confirmText={alert.confirmText}
         cancelText={alert.cancelText}
         type={alert.type}
-        onConfirm={alert.onConfirm}
+        onConfirm={() => {
+          alert.onConfirm?.();
+          hideAlert();
+        }}
       />
     </NotificationContext.Provider>
   );

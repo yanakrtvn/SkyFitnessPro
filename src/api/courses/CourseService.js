@@ -40,12 +40,10 @@ export const getAllCourses = async (forceRefresh = false) => {
       };
       localStorage.setItem(cacheKey, JSON.stringify(cacheData));
       
-      console.log(`✅ Загружено ${result.data?.length || 0} курсов`);
       return result;
     }
 
     if (requiresAuth && (result.error?.includes('401') || result.error?.includes('auth'))) {
-      console.log('Пробуем загрузить курсы без авторизации');
       const publicResult = await get('/courses', { requiresAuth: false });
       
       if (publicResult.success) {
@@ -66,7 +64,6 @@ export const getAllCourses = async (forceRefresh = false) => {
       const cached = localStorage.getItem(COURSE_CACHE.ALL_COURSES);
       if (cached) {
         const parsed = JSON.parse(cached);
-        console.log('Используем старые данные из кэша');
         return parsed.data;
       }
     } catch (e) {
@@ -90,7 +87,7 @@ export const getCourseById = async (courseId) => {
     });
     
     if (result.success) {
-      console.log(`агружен курс: ${result.data?.nameRU || courseId}`);
+
     }
     
     return result;
@@ -113,7 +110,6 @@ export const findCourseByTitle = async (title) => {
       try {
         const parsed = JSON.parse(cached);
         if (Date.now() - parsed.timestamp < 30 * 60 * 1000) {
-          console.log('Используем кэшированный результат поиска');
           return parsed.data;
         }
       } catch (e) {
@@ -177,7 +173,6 @@ export const findCourseByTitle = async (title) => {
 
 export const addUserCourse = async (courseId) => {
   try {
-    console.log(`➕ Добавляем курс: ${courseId}`);
     
     const result = await post(
       '/users/me/courses',
@@ -186,7 +181,6 @@ export const addUserCourse = async (courseId) => {
     );
     
     if (result.success) {
-      console.log('Курс успешно добавлен');
 
       clearCache('user_courses');
       localStorage.removeItem(COURSE_CACHE.USER_COURSES);
@@ -255,7 +249,6 @@ export const getUserCourses = async (forceRefresh = false) => {
         try {
           const parsed = JSON.parse(cached);
           if (Date.now() - parsed.timestamp < 2 * 60 * 1000) {
-            console.log('Используем кэшированные курсы пользователя');
             return parsed.data;
           }
         } catch (e) {
@@ -280,8 +273,6 @@ export const getUserCourses = async (forceRefresh = false) => {
         const courseIds = result.data.map(c => c._id || c.courseId).filter(Boolean);
         localStorage.setItem('userCourses', JSON.stringify(courseIds));
       }
-      
-      console.log(`Загружено ${result.data?.length || 0} курсов пользователя`);
     }
     
     return result;
@@ -292,7 +283,6 @@ export const getUserCourses = async (forceRefresh = false) => {
       const savedCourses = localStorage.getItem('userCourses');
       if (savedCourses) {
         const courseIds = JSON.parse(savedCourses);
-        console.log('Используем сохраненные ID курсов');
         return {
           success: true,
           data: courseIds.map(id => ({ _id: id })),
@@ -314,14 +304,12 @@ export const getUserCourses = async (forceRefresh = false) => {
 
 export const removeUserCourse = async (courseId) => {
   try {
-    console.log(`Удаляем курс: ${courseId}`);
     
     const result = await del(`/users/me/courses/${courseId}`, {
       requiresAuth: true,
     });
     
     if (result.success) {
-      console.log('Курс удален');
 
       clearCache('user_courses');
       localStorage.removeItem(COURSE_CACHE.USER_COURSES);
@@ -353,7 +341,6 @@ export const refreshCoursesCache = () => {
   localStorage.removeItem(COURSE_CACHE.ALL_COURSES);
   localStorage.removeItem(COURSE_CACHE.USER_COURSES);
   clearCache();
-  console.log('Кэш курсов обновлен');
 };
 
 export default {

@@ -8,21 +8,26 @@ export const useAuth = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const email = localStorage.getItem('email');
-    if (token && email) {
-      setUser({ email, token });
+    if (token && email && email.includes('@') && email.includes('.')) {
+    setUser({ email, token });
+    } else {
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
     }
-    setLoading(false);
+      setLoading(false);
   }, []);
 
   const login = async (email, password) => {
     const result = await loginApi(email, password);
     
     if (result.success) {
-      setUser({ email, token: result.token });
-    }
-    
-    return result;
-  };
+    localStorage.setItem('token', result.token);
+    localStorage.setItem('email', email);
+    setUser({ email, token: result.token });
+  }
+  
+  return result;
+};
 
   const register = async (email, password) => {
     return await registerApi(email, password);

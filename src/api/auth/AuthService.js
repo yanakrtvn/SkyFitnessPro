@@ -11,7 +11,6 @@ const AUTH_ERRORS = {
   serverError: 'Ошибка сервера. Попробуйте позже.',
 };
 
-// Валидация пароля
 const validatePassword = (password) => {
   if (password.length < 6) {
     return 'Пароль должен быть не менее 6 символов';
@@ -25,7 +24,6 @@ const validatePassword = (password) => {
   return null;
 };
 
-// Валидация email
 const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
@@ -118,7 +116,6 @@ export const register = async (email, password) => {
     const result = await post('/auth/register', { email, password });
     
     if (result.success) {
-      console.log('Регистрация успешна');
       
       return { 
         success: true,
@@ -186,7 +183,6 @@ export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('email');
   localStorage.removeItem('auth_time');
-  console.log('Пользователь вышел из системы');
   return { success: true };
 };
 

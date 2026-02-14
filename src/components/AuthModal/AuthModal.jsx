@@ -30,14 +30,22 @@ const AuthModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
+  const handleEscape = (e) => {
+    if (e.key === 'Escape' && isOpen) {
+      onClose();
+    }
+  };
+  
+  if (isOpen) {
     document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
+    document.body.style.overflow = 'hidden';
+  }
+  
+  return () => {
+    document.removeEventListener('keydown', handleEscape);
+    document.body.style.overflow = '';
+  };
+}, [isOpen, onClose]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

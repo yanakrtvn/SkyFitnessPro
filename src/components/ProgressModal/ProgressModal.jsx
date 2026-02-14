@@ -20,12 +20,11 @@ const ProgressModal = ({ isOpen, onClose, exercises, currentProgress, onSave }) 
     if (value === '' || value === null || value === undefined) {
       newProgress[index] = 0;
     } else {
-      const cleanValue = value.toString().replace(/^0+/, '') || '0';
-      const numValue = parseInt(cleanValue, 10);
-      newProgress[index] = isNaN(numValue) ? 0 : numValue;
-    }
-    setProgressData(newProgress);
-  };
+    const numValue = parseInt(value, 10);
+    newProgress[index] = isNaN(numValue) ? 0 : numValue;
+  }
+  setProgressData(newProgress);
+};
 
   const handleSave = async () => {
     if (!exercises || exercises.length === 0) {

@@ -35,8 +35,6 @@ export const clearCache = (pattern = null) => {
       count++;
     }
   }
-  
-  console.log(`Удалено ${count} записей из кэша по шаблону: ${pattern}`);
 };
 
 export const getCacheInfo = () => {
@@ -51,7 +49,6 @@ export const cachedRequest = async (apiMethod, endpoint, params = {}, options = 
   
   const cachedData = getFromCache(cacheKey);
   if (cachedData && options.useCache !== false) {
-    console.log('Данные из кэша:', cacheKey);
     return cachedData;
   }
 
