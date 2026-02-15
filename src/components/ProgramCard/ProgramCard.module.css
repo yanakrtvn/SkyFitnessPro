@@ -128,3 +128,93 @@
     fill: var(--color-white);
     stroke: none;
 }
+
+@media (max-width: 768px) {
+    .programCard {
+        padding: 0 0 12px;
+    }
+    
+    .info {
+        padding: 0 16px;
+        gap: 16px;
+    }
+    
+    .title {
+        width: 100%;
+        font-size: 28px;
+    }
+    
+    .details {
+        gap: 8px;
+    }
+    
+    .detailItem {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .programCard {
+        padding: 0 0 10px;
+    }
+    
+    .image {
+        height: 280px;
+    }
+    
+    .addBtn {
+        top: 16px;
+        right: 16px;
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+    }
+    
+    .info {
+        padding: 0 12px;
+        gap: 12px;
+    }
+    
+    .title {
+        font-size: 24px;
+    }
+    
+    .detailItem {
+        font-size: 13px;
+        padding: 6px 8px;
+    }
+    
+    .detailIcon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 375px) {
+    .image {
+        height: 240px;
+    }
+    
+    .addBtn {
+        top: 12px;
+        right: 12px;
+        width: 24px;
+        height: 24px;
+        font-size: 16px;
+    }
+    
+    .info {
+        padding: 0 10px;
+        gap: 10px;
+    }
+    
+    .title {
+        font-size: 22px;
+    }
+    
+    .detailItem {
+        font-size: 12px;
+        padding: 6px;
+    }
+}
