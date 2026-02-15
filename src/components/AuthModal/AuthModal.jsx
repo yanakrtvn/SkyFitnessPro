@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../Logo/Logo';
 import { useAuth } from '../../hooks/useAuth';
-import { useNotification } from '../../context/NotificationContext'
+import { useNotification } from '../../context/NotificationContext';
 import styles from './AuthModal.module.css';
 
 const AuthModal = ({ isOpen, onClose }) => {
@@ -14,7 +14,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { login, register } = useAuth();
   const navigate = useNavigate();
-  const { showSuccess, showError } = useNotification();
+  const { showSuccess } = useNotification();
 
   useEffect(() => {
     if (isOpen) {
@@ -30,29 +30,27 @@ const AuthModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   useEffect(() => {
-  const handleEscape = (e) => {
-    if (e.key === 'Escape' && isOpen) {
-      onClose();
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
     }
-  };
-  
-  if (isOpen) {
-    document.addEventListener('keydown', handleEscape);
-    document.body.style.overflow = 'hidden';
-  }
-  
-  return () => {
-    document.removeEventListener('keydown', handleEscape);
-    document.body.style.overflow = '';
-  };
-}, [isOpen, onClose]);
+    
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, onClose]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
 
     if (!email || !email.includes('@')) {
-      setError('Введите корректное электронное письмо');
+      setError('Введите корректный email');
       return;
     }
 
@@ -62,7 +60,6 @@ const AuthModal = ({ isOpen, onClose }) => {
 
     if (result.success) {
       onClose();
-      
       setTimeout(() => {
         navigate('/profile');
       }, 100);
@@ -76,7 +73,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     setError('');
 
     if (password !== passwordConfirm) {
-      setError('Пароли не совпадают.');
+      setError('Пароли не совпадают');
       return;
     }
 
@@ -85,7 +82,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     setLoading(false);
 
     if (result.success) {
-      showSuccess('Регистрация прошла успешно! Теперь войдите в систему.')
+      showSuccess('Регистрация прошла успешно! Теперь войдите в систему.');
       setIsLogin(true);
       setPassword('');
       setPasswordConfirm('');

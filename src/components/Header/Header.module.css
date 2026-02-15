@@ -82,37 +82,76 @@
 
 .dropdown {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 20px);
     right: 0;
+    width: 266px;
     background: var(--color-white);
-    border-radius: 10px;
+    border-radius: 30px;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
-    min-width: 200px;
-    padding: 8px 0;
+    padding: 30px;
     z-index: 1000;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
-.dropdownItem {
-    width: 100%;
-    padding: 12px 20px;
-    border: none;
-    background: transparent;
-    text-align: left;
-    font-family: var(--font-family);
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.userInfoName {
     font-size: 18px;
-    font-weight: var(--font-weight-normal);
+    font-weight: 600;
     color: var(--color-text-dark);
+    line-height: 1.2;
+}
+
+.userInfoEmail {
+    font-size: 14px;
+    color: var(--color-text-dark);
+    opacity: 0.5;
+    line-height: 1.2;
+}
+
+.profileBtn,
+.logoutBtn {
+    width: 206px;
+    height: 52px;
+    border-radius: 46px;
+    padding: 16px 26px;
+    font-family: var(--font-family);
+    font-size: 16px;
+    font-weight: var(--font-weight-normal);
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    margin: 0 auto;
 }
 
-.dropdownItem:hover {
+.profileBtn {
+    background: var(--color-primary, rgba(188, 236, 48, 1));
+    color: var(--color-text-dark);
+}
+
+.profileBtn:hover {
+    background: var(--color-primary-dark, rgba(198, 255, 0, 1));
+}
+
+.logoutBtn {
+    background: transparent;
+    color: var(--color-text-dark);
+    border: 1px solid var(--color-text-dark);
+}
+
+.logoutBtn:hover {
     background: var(--color-bg-light);
-}
-
-.dropdownItem:first-child {
-    border-bottom: 1px solid var(--color-bg-light);
 }
 
 @media (max-width: 768px) {
@@ -124,11 +163,27 @@
         flex-direction: column;
         gap: 16px;
     }
+    
+    .dropdown {
+        right: -20px;
+    }
 }
 
 @media (max-width: 480px) {
     .header {
         padding: 16px 0;
+    }
+    
+    .dropdown {
+        width: 240px;
+        padding: 20px;
+    }
+    
+    .profileBtn,
+    .logoutBtn {
+        width: 180px;
+        height: 48px;
+        padding: 14px 20px;
     }
 }
 

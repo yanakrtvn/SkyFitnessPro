@@ -24,15 +24,12 @@ export const saveToCache = (key, data) => {
 export const clearCache = (pattern = null) => {
   if (!pattern) {
     cache.clear();
-    console.log('Весь кэш очищен');
     return;
   }
   
-  let count = 0;
   for (const key of cache.keys()) {
     if (key.includes(pattern)) {
       cache.delete(key);
-      count++;
     }
   }
 };

@@ -35,7 +35,6 @@ const WorkoutsPage = ({ onOpenAuth }) => {
     const email = localStorage.getItem('email');
     if (!token || !email) {
       navigate('/');
-      return;
     }
   }, [navigate]);
 
@@ -49,45 +48,42 @@ const WorkoutsPage = ({ onOpenAuth }) => {
       }
 
       setLoading(true);
-      try {
-        const [workoutsResult, progressResult] = await Promise.all([
-          getCourseWorkouts(apiCourseId),
-          getCourseProgress(apiCourseId),
-        ]);
+      
+      const [workoutsResult, progressResult] = await Promise.all([
+        getCourseWorkouts(apiCourseId),
+        getCourseProgress(apiCourseId),
+      ]);
 
-         if (!isMounted) return;
+      if (!isMounted) return;
 
-        if (!workoutsResult.success || !workoutsResult.data) {
-          setLoading(false);
-          return;
-        }
-
-        setWorkouts(workoutsResult.data);
-
-        if (progressResult.success && progressResult.data?.workoutsProgress) {
-          const progressMap = {};
-          const details = await Promise.all(
-            progressResult.data.workoutsProgress.map(async (wp) => {
-              const detail = await getWorkoutById(wp.workoutId);
-              const percent =
-                detail.success && detail.data?.exercises
-                  ? calculateWorkoutProgress(wp, detail.data.exercises)
-                  : wp.workoutCompleted
-                    ? 100
-                    : 0;
-              return { workoutId: wp.workoutId, progress: percent };
-            })
-          );
-          details.forEach(({ workoutId, progress }) => {
-            progressMap[workoutId] = progress;
-          });
-          setWorkoutProgress(progressMap);
-        }
-      } catch (error) {
-        if (isMounted) console.error(error);
-      } finally {
-        if (isMounted) setLoading(false);
+      if (!workoutsResult.success || !workoutsResult.data) {
+        setLoading(false);
+        return;
       }
+
+      setWorkouts(workoutsResult.data);
+
+      if (progressResult.success && progressResult.data?.workoutsProgress) {
+        const progressMap = {};
+        const details = await Promise.all(
+          progressResult.data.workoutsProgress.map(async (wp) => {
+            const detail = await getWorkoutById(wp.workoutId);
+            const percent =
+              detail.success && detail.data?.exercises
+                ? calculateWorkoutProgress(wp, detail.data.exercises)
+                : wp.workoutCompleted
+                  ? 100
+                  : 0;
+            return { workoutId: wp.workoutId, progress: percent };
+          })
+        );
+        details.forEach(({ workoutId, progress }) => {
+          progressMap[workoutId] = progress;
+        });
+        setWorkoutProgress(progressMap);
+      }
+      
+      if (isMounted) setLoading(false);
     };
 
     fetchData();
@@ -95,7 +91,7 @@ const WorkoutsPage = ({ onOpenAuth }) => {
     return () => {
       isMounted = false;
     };
-}, [apiCourseId]);
+  }, [apiCourseId]);
 
   if (authLoading) {
     return (

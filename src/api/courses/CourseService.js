@@ -19,7 +19,7 @@ export const getAllCourses = async (forceRefresh = false) => {
             return parsed.data;
           }
         } catch (e) {
-          // Н
+          // Игнорируем ошибки парсинга кэша
         }
       }
     }
@@ -58,8 +58,6 @@ export const getAllCourses = async (forceRefresh = false) => {
     
     return result;
   } catch (error) {
-    console.error('Ошибка получения курсов:', error);
-
     try {
       const cached = localStorage.getItem(COURSE_CACHE.ALL_COURSES);
       if (cached) {
@@ -67,12 +65,12 @@ export const getAllCourses = async (forceRefresh = false) => {
         return parsed.data;
       }
     } catch (e) {
-      // Н
+      // Игнорируем ошибки при падении
     }
     
     return {
       success: false,
-      error: error.userMessage || 'Не удалось загрузить курсы',
+      error: 'Не удалось загрузить курсы',
       data: [],
       isOffline: true
     };
@@ -86,16 +84,11 @@ export const getCourseById = async (courseId) => {
       cacheKey: `course_${courseId}`
     });
     
-    if (result.success) {
-
-    }
-    
     return result;
   } catch (error) {
-    console.error('Ошибка получения курса:', error);
     return {
       success: false,
-      error: error.userMessage || 'Не удалось загрузить курс',
+      error: 'Не удалось загрузить курс',
       courseId
     };
   }
@@ -113,7 +106,7 @@ export const findCourseByTitle = async (title) => {
           return parsed.data;
         }
       } catch (e) {
-        // Н
+        // Игнорируем ошибки кэша поиска
       }
     }
 
@@ -163,17 +156,15 @@ export const findCourseByTitle = async (title) => {
     
     return searchResult;
   } catch (error) {
-    console.error('Ошибка поиска курса:', error);
     return {
       success: false,
-      error: error.userMessage || 'Ошибка при поиске курса',
+      error: 'Ошибка при поиске курса',
     };
   }
 };
 
 export const addUserCourse = async (courseId) => {
   try {
-    
     const result = await post(
       '/users/me/courses',
       { courseId },
@@ -181,7 +172,6 @@ export const addUserCourse = async (courseId) => {
     );
     
     if (result.success) {
-
       clearCache('user_courses');
       localStorage.removeItem(COURSE_CACHE.USER_COURSES);
 
@@ -212,17 +202,12 @@ export const addUserCourse = async (courseId) => {
       message: isDuplicate ? 'Этот курс уже в вашей коллекции!' : errorMessage
     };
   } catch (error) {
-    console.error('Ошибка добавления курса:', error);
-    
     let errorMessage = 'Не удалось добавить курс. Попробуйте еще раз.';
-    let userMessage = 'Ошибка при добавлении курса';
     
     if (error.data?.message) {
       errorMessage = error.data.message;
-      userMessage = error.data.message;
-    } else if (error.userMessage) {
-      errorMessage = error.userMessage;
-      userMessage = error.userMessage;
+    } else if (error.message) {
+      errorMessage = error.message;
     }
     
     const isDuplicate = 
@@ -233,7 +218,6 @@ export const addUserCourse = async (courseId) => {
     return {
       success: isDuplicate,
       error: isDuplicate ? null : errorMessage,
-      userMessage: isDuplicate ? 'Курс уже добавлен!' : userMessage,
       isDuplicate,
     };
   }
@@ -252,7 +236,7 @@ export const getUserCourses = async (forceRefresh = false) => {
             return parsed.data;
           }
         } catch (e) {
-          // Н
+          // Игнорируем ошибки кэша пользователя
         }
       }
     }
@@ -277,8 +261,6 @@ export const getUserCourses = async (forceRefresh = false) => {
     
     return result;
   } catch (error) {
-    console.error('Ошибка получения курсов пользователя:', error);
-
     try {
       const savedCourses = localStorage.getItem('userCourses');
       if (savedCourses) {
@@ -290,12 +272,12 @@ export const getUserCourses = async (forceRefresh = false) => {
         };
       }
     } catch (e) {
-      // Н
+      // Игнорируем ошибки
     }
     
     return {
       success: false,
-      error: error.userMessage || 'Не удалось загрузить ваши курсы',
+      error: 'Не удалось загрузить ваши курсы',
       data: [],
       isOffline: true
     };
@@ -304,13 +286,11 @@ export const getUserCourses = async (forceRefresh = false) => {
 
 export const removeUserCourse = async (courseId) => {
   try {
-    
     const result = await del(`/users/me/courses/${courseId}`, {
       requiresAuth: true,
     });
     
     if (result.success) {
-
       clearCache('user_courses');
       localStorage.removeItem(COURSE_CACHE.USER_COURSES);
 
@@ -329,10 +309,9 @@ export const removeUserCourse = async (courseId) => {
       error: result.data?.message || 'Не удалось удалить курс',
     };
   } catch (error) {
-    console.error('Ошибка удаления курса:', error);
     return {
       success: false,
-      error: error.userMessage || 'Не удалось удалить курс. Попробуйте еще раз.',
+      error: 'Не удалось удалить курс. Попробуйте еще раз.',
     };
   }
 };

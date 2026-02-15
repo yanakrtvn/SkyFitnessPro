@@ -22,6 +22,7 @@ const TrainingPage = ({ onOpenAuth }) => {
   const [apiCourseId, setApiCourseId] = useState(null);
   const [progressModalOpen, setProgressModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [userProgress, setUserProgress] = useState(null);
 
   const program = getProgramById(courseId);
 
@@ -37,8 +38,6 @@ const TrainingPage = ({ onOpenAuth }) => {
 
     fetchApiCourseId();
   }, [program]);
-
-  const [userProgress, setUserProgress] = useState(null);
 
   useEffect(() => {
     const fetchWorkout = async () => {
@@ -86,7 +85,6 @@ const TrainingPage = ({ onOpenAuth }) => {
       const email = localStorage.getItem('email');
       if (!token || !email) {
         navigate('/');
-        return;
       }
     }
   }, [authLoading, navigate]);
@@ -156,7 +154,7 @@ const TrainingPage = ({ onOpenAuth }) => {
     }
 
     if (progressData.length !== exercises.length) {
-      showError(`Количество значений прогресса не совпадает с количеством упражнений`);
+      showError('Количество значений прогресса не совпадает с количеством упражнений');
       return;
     }
 
@@ -199,7 +197,6 @@ const TrainingPage = ({ onOpenAuth }) => {
       }
     });
   };
-
 
   return (
     <>
@@ -250,7 +247,6 @@ const TrainingPage = ({ onOpenAuth }) => {
                     const progressPercent = quantity > 0 
                       ? Math.min(100, Math.round((progressValue / quantity) * 100)) 
                       : 0;
-                    
                     
                     return (
                       <div key={exercise._id || index} className={styles.exerciseItem}>

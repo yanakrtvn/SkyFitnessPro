@@ -14,14 +14,14 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const { login, register } = useAuth();
   const navigate = useNavigate();
-  const { showSuccess, showError } = useNotification();
+  const { showSuccess } = useNotification();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
 
     if (!email || !email.includes('@')) {
-      setError('Введите корректное электронное письмо');
+      setError('Введите корректный email');
       return;
     }
 
@@ -41,7 +41,7 @@ const AuthPage = () => {
     setError('');
 
     if (password !== passwordConfirm) {
-      setError('Пароли не совпадают.');
+      setError('Пароли не совпадают');
       return;
     }
 

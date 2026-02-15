@@ -1,5 +1,6 @@
 const API_BASE_URL = 'https://wedev-api.sky.pro/api/fitness';
 const requestCache = new Map();
+
 class FitApiError extends Error {
   constructor(message, status = 0, data = null) {
     super(message);
@@ -21,7 +22,6 @@ const request = async (endpoint, options = {}) => {
   if (method === 'GET' && useCache) {
     const cached = requestCache.get(cacheKey);
     if (cached) {
-      console.log('💾 Кэш:', cacheKey);
       return cached;
     }
   }
@@ -109,9 +109,7 @@ const api = {
   post,
   patch,
   delete: del,
-  clearCache,
-  _getCacheSize: () => requestCache.size,
-  _getCacheKeys: () => Array.from(requestCache.keys()),
+  clearCache
 };
 
 export default api;
