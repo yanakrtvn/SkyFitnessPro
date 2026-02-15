@@ -1,7 +1,6 @@
 import api from '../core/FitApi';
 const { get } = api;
 
-
 export const getWorkoutById = async (workoutId) => {
   try {
     const result = await get(`/workouts/${workoutId}`, {

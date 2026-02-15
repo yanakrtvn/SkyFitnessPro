@@ -1,4 +1,5 @@
 import api from '../core/FitApi';
+
 const { post } = api;
 
 const AUTH_ERRORS = {
@@ -67,17 +68,12 @@ export const login = async (email, password) => {
       error: result.data?.message || AUTH_ERRORS.loginIncorrect,
     };
   } catch (error) {
-    console.error('Ошибка авторизации:', error);
-    
     let errorMessage = AUTH_ERRORS.loginIncorrect;
-    let userMessage = 'Не удалось войти. Проверьте данные.';
     
     if (error.message) {
       errorMessage = error.message;
-      userMessage = error.userMessage || error.message;
     } else if (error.data?.message) {
       errorMessage = error.data.message;
-      userMessage = error.data.message;
     }
 
     let field = 'general';
@@ -87,9 +83,7 @@ export const login = async (email, password) => {
     return {
       success: false,
       error: errorMessage,
-      userMessage,
-      field,
-      originalError: error
+      field
     };
   }
 };
@@ -116,7 +110,6 @@ export const register = async (email, password) => {
     const result = await post('/auth/register', { email, password });
     
     if (result.success) {
-      
       return { 
         success: true,
         message: 'Регистрация прошла успешно! Теперь войдите в систему.',
@@ -129,17 +122,12 @@ export const register = async (email, password) => {
       error: result.data?.message || AUTH_ERRORS.emailExists,
     };
   } catch (error) {
-    console.error('Ошибка регистрации:', error);
-    
     let errorMessage = AUTH_ERRORS.emailExists;
-    let userMessage = 'Не удалось зарегистрироваться.';
     
     if (error.message) {
       errorMessage = error.message;
-      userMessage = error.userMessage || error.message;
     } else if (error.data?.message) {
       errorMessage = error.data.message;
-      userMessage = error.data.message;
     }
 
     let field = 'general';
@@ -149,9 +137,7 @@ export const register = async (email, password) => {
     return {
       success: false,
       error: errorMessage,
-      userMessage,
-      field,
-      originalError: error
+      field
     };
   }
 };
@@ -163,13 +149,6 @@ export const checkAuth = () => {
   
   if (!token || !email) {
     return { isAuthenticated: false };
-  }
-
-  if (authTime) {
-    const daysSinceAuth = (Date.now() - parseInt(authTime)) / (1000 * 60 * 60 * 24);
-    if (daysSinceAuth > 6) {
-      console.warn('Токен скоро истекает');
-    }
   }
   
   return {

@@ -13,7 +13,6 @@ export const {
   API_BASE_URL 
 } = api;
 
-// Auth
 export { 
   login, 
   register, 
@@ -23,7 +22,6 @@ export {
   validateEmail 
 } from './auth/AuthService';
 
-// Courses
 export {
   getAllCourses,
   getCourseById,
@@ -34,13 +32,11 @@ export {
   refreshCoursesCache
 } from './courses/CourseService';
 
-// Workouts
 export {
   getWorkoutById,
   getCourseWorkouts
 } from './workouts/WorkoutService';
 
-// Progress
 export {
   getCourseProgress,
   getUserProgress,
@@ -50,7 +46,6 @@ export {
   calculateCourseProgress
 } from './progress/ProgressTracker';
 
-// Utils
 export { 
   appCache,
   courseCache,

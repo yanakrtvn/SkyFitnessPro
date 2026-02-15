@@ -48,7 +48,7 @@ const ProgramPage = ({ onOpenAuth }) => {
       } else {
         setUserCourses([]);
       }
-    } catch (error) {
+    } catch {
       setUserCourses([]);
     }
   }, [isAuthenticated]);
@@ -68,7 +68,7 @@ const ProgramPage = ({ onOpenAuth }) => {
 
   const hasCourse = apiCourseId ? userCourses.includes(apiCourseId) : false;
 
-   const handleAddCourse = async () => {
+  const handleAddCourse = async () => {
     if (!isAuthenticated) {
       onOpenAuth();
       showInfo('Войдите в систему, чтобы добавить курс');
@@ -81,36 +81,36 @@ const ProgramPage = ({ onOpenAuth }) => {
     }
 
     showAlert({
-    title: 'Добавить курс?',
-    message: `Добавить курс «${program.title}» в Вашу коллекцию?`,
-    type: 'warning',
-    confirmText: 'Добавить',
-    cancelText: 'Отмена',
-    onConfirm: async () => {
-      setIsAdding(true);
-      
-      const result = await addUserCourse(apiCourseId);
-      
-      if (result.success || result.isDuplicate) {
-        if (!userCourses.includes(apiCourseId)) {
-          const updatedCourses = [...userCourses, apiCourseId];
-          setUserCourses(updatedCourses);
-          localStorage.setItem('userCourses', JSON.stringify(updatedCourses));
+      title: 'Добавить курс?',
+      message: `Добавить курс «${program.title}» в Вашу коллекцию?`,
+      type: 'warning',
+      confirmText: 'Добавить',
+      cancelText: 'Отмена',
+      onConfirm: async () => {
+        setIsAdding(true);
+        
+        const result = await addUserCourse(apiCourseId);
+        
+        if (result.success || result.isDuplicate) {
+          if (!userCourses.includes(apiCourseId)) {
+            const updatedCourses = [...userCourses, apiCourseId];
+            setUserCourses(updatedCourses);
+            localStorage.setItem('userCourses', JSON.stringify(updatedCourses));
+          }
+          
+          if (result.isDuplicate) {
+            showInfo('Курс уже был добавлен ранее!');
+          } else {
+            showSuccess('Курс успешно добавлен в вашу коллекцию!');
+          }
+        } else {
+          showError(result.error || 'Не удалось добавить курс. Попробуйте еще раз.');
         }
         
-        if (result.isDuplicate) {
-          showInfo('Курс уже был добавлен ранее!');
-        } else {
-          showSuccess('Курс успешно добавлен в вашу коллекцию!');
-        }
-      } else {
-        showError(result.error || 'Не удалось добавить курс. Попробуйте еще раз.');
+        setIsAdding(false);
       }
-      
-      setIsAdding(false);
-    }
-  });
-};
+    });
+  };
 
   return (
     <>

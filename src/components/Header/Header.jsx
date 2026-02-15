@@ -10,7 +10,6 @@ const Header = ({ onOpenAuth }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -49,17 +48,19 @@ const Header = ({ onOpenAuth }) => {
     onOpenAuth();
   };
 
-  
   const getUserName = () => {
     if (!user || !user.email) return 'Пользователь';
     const email = user.email;
-    
     const namePart = email.split('@')[0];
-    
     return namePart.charAt(0).toUpperCase() + namePart.slice(1).split('.')[0];
   };
 
+  const getUserEmail = () => {
+    return user?.email || '';
+  };
+
   const userName = getUserName();
+  const userEmail = getUserEmail();
 
   return (
     <header className={styles.header}>
@@ -102,14 +103,18 @@ const Header = ({ onOpenAuth }) => {
               </button>
               {dropdownOpen && (
                 <div className={styles.dropdown}>
+                  <div className={styles.userInfo}>
+                    <div className={styles.userInfoName}>{userName}</div>
+                    <div className={styles.userInfoEmail}>{userEmail}</div>
+                  </div>
                   <button 
-                    className={styles.dropdownItem}
+                    className={styles.profileBtn}
                     onClick={handleProfileClick}
                   >
                     Мой профиль
                   </button>
                   <button 
-                    className={styles.dropdownItem}
+                    className={styles.logoutBtn}
                     onClick={handleLogout}
                   >
                     Выйти

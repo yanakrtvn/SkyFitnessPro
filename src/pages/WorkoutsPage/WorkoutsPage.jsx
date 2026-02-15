@@ -35,66 +35,76 @@ const WorkoutsPage = ({ onOpenAuth }) => {
     const email = localStorage.getItem('email');
     if (!token || !email) {
       navigate('/');
-      return;
     }
   }, [navigate]);
 
   useEffect(() => {
-    let isMounted = true;
+  let isMounted = true;
 
-    const fetchData = async () => {
-      if (!apiCourseId) {
-        if (isMounted) setLoading(false);
-        return;
-      }
+  const fetchData = async () => {
+    if (!apiCourseId) {
+      if (isMounted) setLoading(false);
+      return;
+    }
 
-      setLoading(true);
-      try {
-        const [workoutsResult, progressResult] = await Promise.all([
-          getCourseWorkouts(apiCourseId),
-          getCourseProgress(apiCourseId),
-        ]);
+    setLoading(true);
+    
+    const [workoutsResult, progressResult] = await Promise.all([
+      getCourseWorkouts(apiCourseId),
+      getCourseProgress(apiCourseId),
+    ]);
 
-         if (!isMounted) return;
+    if (!isMounted) return;
 
-        if (!workoutsResult.success || !workoutsResult.data) {
-          setLoading(false);
-          return;
-        }
+    if (!workoutsResult.success || !workoutsResult.data) {
+      setLoading(false);
+      return;
+    }
 
-        setWorkouts(workoutsResult.data);
+    const sortedWorkouts = [...workoutsResult.data].sort((a, b) => {
+      const extractNumber = (workout) => {
+        if (!workout?.name) return 999;
+        
+        const match = workout.name.match(/\d+/);
+        return match ? parseInt(match[0]) : 999;
+      };
+      
+      const numA = extractNumber(a);
+      const numB = extractNumber(b);
+      
+      return numA - numB;
+    });
 
-        if (progressResult.success && progressResult.data?.workoutsProgress) {
-          const progressMap = {};
-          const details = await Promise.all(
-            progressResult.data.workoutsProgress.map(async (wp) => {
-              const detail = await getWorkoutById(wp.workoutId);
-              const percent =
-                detail.success && detail.data?.exercises
-                  ? calculateWorkoutProgress(wp, detail.data.exercises)
-                  : wp.workoutCompleted
-                    ? 100
-                    : 0;
-              return { workoutId: wp.workoutId, progress: percent };
-            })
-          );
-          details.forEach(({ workoutId, progress }) => {
-            progressMap[workoutId] = progress;
-          });
-          setWorkoutProgress(progressMap);
-        }
-      } catch (error) {
-        if (isMounted) console.error(error);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
+    setWorkouts(sortedWorkouts);
 
-    fetchData();
-  
-    return () => {
-      isMounted = false;
-    };
+    if (progressResult.success && progressResult.data?.workoutsProgress) {
+      const progressMap = {};
+      const details = await Promise.all(
+        progressResult.data.workoutsProgress.map(async (wp) => {
+          const detail = await getWorkoutById(wp.workoutId);
+          const percent =
+            detail.success && detail.data?.exercises
+              ? calculateWorkoutProgress(wp, detail.data.exercises)
+              : wp.workoutCompleted
+                ? 100
+                : 0;
+          return { workoutId: wp.workoutId, progress: percent };
+        })
+      );
+      details.forEach(({ workoutId, progress }) => {
+        progressMap[workoutId] = progress;
+      });
+      setWorkoutProgress(progressMap);
+    }
+    
+    if (isMounted) setLoading(false);
+  };
+
+  fetchData();
+
+  return () => {
+    isMounted = false;
+  };
 }, [apiCourseId]);
 
   if (authLoading) {

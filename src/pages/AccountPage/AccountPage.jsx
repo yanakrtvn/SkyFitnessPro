@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import Header from '../../components/Header/Header';
-import { programs, getProgramById } from '../../data/programs';
+import { programs } from '../../data/programs';
 import { getAllCourses, removeUserCourse } from '../../api/courses/CourseService';
 import { calculateCourseProgress } from '../../api/progress/ProgressTracker';
 import styles from './AccountPage.module.css';
@@ -38,7 +38,6 @@ const AccountPage = ({ onOpenAuth }) => {
         }
 
         const courseIds = JSON.parse(savedCourseIds);
-
         const allCoursesResult = await getAllCourses(false);
         
         if (allCoursesResult.success && allCoursesResult.data) {
@@ -55,8 +54,7 @@ const AccountPage = ({ onOpenAuth }) => {
             try {
               const progress = await calculateCourseProgress(course._id);
               return { courseId: course._id, progress };
-            } catch (error) {
-              console.error(`Ошибка прогресса для ${course._id}:`, error);
+            } catch {
               return { courseId: course._id, progress: 0 };
             }
           });
@@ -72,15 +70,13 @@ const AccountPage = ({ onOpenAuth }) => {
           
           setCourseProgress(progressMap);
         } else {
-          console.warn('Не удалось загрузить курсы из API');
           setUserCourses(courseIds.map(id => ({ 
             _id: id, 
             nameRU: 'Курс ' + id.substring(0, 6),
             nameEN: 'Course ' + id.substring(0, 6)
           })));
         }
-      } catch (error) {
-        console.error('Ошибка загрузки данных профиля:', error);
+      } catch {
         setUserCourses([]);
       } finally {
         setLoading(false);
@@ -93,18 +89,12 @@ const AccountPage = ({ onOpenAuth }) => {
   useEffect(() => {
     const handleStorageChange = (e) => {
       if (e.key === 'userCourses') {
-        
-
         if (e.newValue) {
           const newCourseIds = JSON.parse(e.newValue);
-
           const updatedUserCourses = allApiCourses.filter(course => 
             newCourseIds.includes(course._id)
           );
           setUserCourses(updatedUserCourses);
-          
-          const updatedProgress = { ...courseProgress };
-
         } else {
           setUserCourses([]);
         }
@@ -113,7 +103,8 @@ const AccountPage = ({ onOpenAuth }) => {
     
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
-  }, [allApiCourses, courseProgress]);
+  }, [allApiCourses]);
+
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -246,9 +237,7 @@ const AccountPage = ({ onOpenAuth }) => {
                   <>
                     {userCourses.map((course) => {
                       const courseId = course._id;
-                      let program = null;
-                      
-                      program = programs.find(p => 
+                      let program = programs.find(p => 
                         p.title === course.nameRU || 
                         p.title.toLowerCase() === (course.nameEN || '').toLowerCase()
                       );

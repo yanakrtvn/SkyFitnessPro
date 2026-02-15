@@ -9,10 +9,9 @@ export const getCourseProgress = async (courseId) => {
     );
     return result;
   } catch (error) {
-    console.error('Ошибка получения прогресса курса:', error);
     return {
       success: false,
-      error: error.userMessage || 'Не удалось загрузить прогресс по курсу',
+      error: 'Не удалось загрузить прогресс по курсу',
     };
   }
 };
@@ -25,10 +24,9 @@ export const getUserProgress = async (courseId, workoutId) => {
     );
     return result;
   } catch (error) {
-    console.error('Ошибка получения прогресса пользователя:', error);
     return {
       success: false,
-      error: error.userMessage || 'Не удалось загрузить прогресс',
+      error: 'Не удалось загрузить прогресс',
     };
   }
 };
@@ -50,10 +48,9 @@ export const saveProgress = async (courseId, workoutId, progressData) => {
       error: result.data?.message || 'Не удалось сохранить прогресс',
     };
   } catch (error) {
-    console.error('Ошибка сохранения прогресса:', error);
     return {
       success: false,
-      error: error.userMessage || 'Не удалось сохранить прогресс',
+      error: 'Не удалось сохранить прогресс',
     };
   }
 };
@@ -75,10 +72,9 @@ export const resetProgress = async (courseId, workoutId) => {
       error: result.data?.message || 'Не удалось сбросить прогресс',
     };
   } catch (error) {
-    console.error('Ошибка сброса прогресса:', error);
     return {
       success: false,
-      error: error.userMessage || 'Не удалось сбросить прогресс',
+      error: 'Не удалось сбросить прогресс',
     };
   }
 };
@@ -135,7 +131,6 @@ export const calculateCourseProgress = async (courseId) => {
     return hasProgress ? 50 : 0;
     
   } catch (error) {
-    console.error('Ошибка расчета прогресса курса:', error);
     return 0;
   }
 };

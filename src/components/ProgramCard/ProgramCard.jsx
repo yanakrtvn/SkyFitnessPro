@@ -45,7 +45,6 @@ const ProgramCard = ({ program, onOpenAuth }) => {
           }
 
           const apiCourseId = findResult.data._id;
-
           const result = await addUserCourse(apiCourseId);
           
           if (result.success || result.isDuplicate) {
@@ -65,8 +64,7 @@ const ProgramCard = ({ program, onOpenAuth }) => {
           } else {
             showError(result.error || 'Не удалось добавить курс. Попробуйте еще раз.');
           }
-        } catch (error) {
-          console.error('Ошибка при добавлении курса:', error);
+        } catch {
           showError('Произошла ошибка. Попробуйте еще раз.');
         } finally {
           setIsAdding(false);
