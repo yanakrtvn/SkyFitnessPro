@@ -35,7 +35,11 @@ const request = async (endpoint, options = {}) => {
   if (requiresAuth) {
     const token = localStorage.getItem('token');
     if (!token) {
-      throw new FitApiError('Требуется авторизация', 401);
+      return {
+        success: false,
+        data: { message: 'Требуется авторизация' },
+        status: 401
+      };
     }
     headers['Authorization'] = `Bearer ${token}`;
   }
@@ -68,14 +72,25 @@ const request = async (endpoint, options = {}) => {
       requestCache.clear();
     }
 
-    const errorText = await response.text();
-    throw new FitApiError(errorText || 'Ошибка запроса', response.status);
+    let errorData;
+    try {
+      errorData = await response.json();
+    } catch (e) {
+      errorData = { message: 'Ошибка запроса' };
+    }
+
+    return {
+      success: false,
+      data: errorData,
+      status: response.status
+    };
 
   } catch (error) {
-    if (error instanceof FitApiError) {
-      throw error;
-    }
-    throw new FitApiError(error.message || 'Ошибка сети', 0);
+    return {
+      success: false,
+      data: { message: error.message || 'Ошибка сети' },
+      status: 0
+    };
   }
 };
 

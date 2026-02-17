@@ -63,31 +63,36 @@ export const login = async (email, password) => {
       };
     }
     
-    return {
-      success: false,
-      error: result.data?.message || AUTH_ERRORS.loginIncorrect,
-    };
-  } catch (error) {
-    let errorMessage = AUTH_ERRORS.loginIncorrect;
-    let userMessage = null;
-    
-    if (error.message) {
-      errorMessage = error.message;
-      if (errorMessage === 'Network Error') {
-        userMessage = 'Проблемы с сетью. Проверьте подключение.';
-      }
-    } else if (error.data?.message) {
-      errorMessage = error.data.message;
-    }
-
-    let field = 'general';
-    if (errorMessage.toLowerCase().includes('парол')) field = 'password';
-    if (errorMessage.toLowerCase().includes('email') || errorMessage.toLowerCase().includes('почт')) field = 'email';
+    const errorMessage = result.data?.message || AUTH_ERRORS.loginIncorrect;
     
     return {
       success: false,
       error: errorMessage,
-      userMessage: userMessage,
+    };
+  } catch (error) {
+    let field = 'general';
+    const errorMessage = error.message || '';
+    
+    if (errorMessage.toLowerCase().includes('парол')) {
+      field = 'password';
+    } else if (errorMessage.toLowerCase().includes('email') || 
+               errorMessage.toLowerCase().includes('почт') ||
+               errorMessage.toLowerCase().includes('not found')) {
+      field = 'email';
+    }
+    
+    if (errorMessage === 'Network Error') {
+      return {
+        success: false,
+        error: 'Network Error',
+        userMessage: AUTH_ERRORS.networkError,
+        field: 'general'
+      };
+    }
+    
+    return {
+      success: false,
+      error: errorMessage,
       field
     };
   }
@@ -122,32 +127,33 @@ export const register = async (email, password) => {
       };
     }
     
-    return {
-      success: false,
-      error: result.data?.message || AUTH_ERRORS.emailExists,
-    };
-  } catch (error) {
-    let errorMessage = AUTH_ERRORS.emailExists;
-    let userMessage = null;
-    
-    if (error.message) {
-      errorMessage = error.message;
-      if (errorMessage === 'Server Error') {
-        userMessage = 'Ошибка сервера';
-      }
-    } else if (error.data?.message) {
-      errorMessage = error.data.message;
-    }
-
-    let field = 'general';
-    if (errorMessage.toLowerCase().includes('парол')) field = 'password';
-    if (errorMessage.toLowerCase().includes('email') || errorMessage.toLowerCase().includes('почт')) field = 'email';
+    const errorMessage = result.data?.message || AUTH_ERRORS.emailExists;
     
     return {
       success: false,
       error: errorMessage,
-      userMessage: userMessage,
-      field
+    };
+  } catch (error) {
+    const errorMessage = error.message || '';
+    
+    if (errorMessage === 'Server Error') {
+      return {
+        success: false,
+        error: 'Server Error',
+        userMessage: 'Ошибка сервера'
+      };
+    }
+    
+    if (errorMessage === 'Network Error') {
+      return {
+        success: false,
+        error: AUTH_ERRORS.networkError,
+      };
+    }
+    
+    return {
+      success: false,
+      error: errorMessage || AUTH_ERRORS.networkError,
     };
   }
 };

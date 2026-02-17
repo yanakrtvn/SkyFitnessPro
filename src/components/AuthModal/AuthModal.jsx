@@ -46,27 +46,27 @@ const AuthModal = ({ isOpen, onClose }) => {
   }, [isOpen, onClose]);
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
+  e.preventDefault();
+  setError('');
 
-    if (!email || !email.includes('@')) {
-      setError('Введите корректный email');
-      return;
-    }
+  if (!email || !email.includes('@')) {
+    setError('Введите корректный email');
+    return;
+  }
 
-    setLoading(true);
-    const result = await login(email, password);
-    setLoading(false);
+  setLoading(true);
+  const result = await login(email, password);
+  setLoading(false);
 
-    if (result.success) {
-      onClose();
-      setTimeout(() => {
-        navigate('/profile');
-      }, 100);
-    } else {
-      setError(result.error);
-    }
-  };
+  if (result.success) {
+    onClose();
+    setTimeout(() => {
+      navigate('/profile');
+    }, 100);
+  } else {
+    setError(result.error || 'Произошла ошибка при входе');
+  }
+};
 
   const handleRegister = async (e) => {
     e.preventDefault();
