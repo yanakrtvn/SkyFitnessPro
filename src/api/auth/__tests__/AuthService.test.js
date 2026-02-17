@@ -161,17 +161,17 @@ describe('AuthService', () => {
     })
 
     it('должен обрабатывать сбой сети', async () => {
-      const error = new Error('Network Error')
-      error.userMessage = 'Проблемы с сетью. Проверьте подключение.'
-      api.post.mockRejectedValue(error)
+  const error = new Error('Network Error')
+  error.userMessage = 'Проблемы с сетью. Проверьте подключение.'
+  api.post.mockRejectedValue(error)
 
-      const result = await login('test@example.com', 'password123')
+  const result = await login('test@example.com', 'password123')
 
-      expect(result.success).toBe(false)
-      expect(result.error).toBe('Network Error')
-      expect(result.userMessage).toBe('Проблемы с сетью. Проверьте подключение.')
-      expect(result.field).toBe('general')
-    })
+  expect(result.success).toBe(false)
+  expect(result.error).toBe('Network Error')
+  expect(result.userMessage).toBe('Проблемы с сетью. Проверьте подключение.')
+  expect(result.field).toBe('general')
+})
   })
 
   describe('register', () => {

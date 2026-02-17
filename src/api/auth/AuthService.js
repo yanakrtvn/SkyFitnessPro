@@ -69,9 +69,13 @@ export const login = async (email, password) => {
     };
   } catch (error) {
     let errorMessage = AUTH_ERRORS.loginIncorrect;
+    let userMessage = null;
     
     if (error.message) {
       errorMessage = error.message;
+      if (errorMessage === 'Network Error') {
+        userMessage = 'Проблемы с сетью. Проверьте подключение.';
+      }
     } else if (error.data?.message) {
       errorMessage = error.data.message;
     }
@@ -83,6 +87,7 @@ export const login = async (email, password) => {
     return {
       success: false,
       error: errorMessage,
+      userMessage: userMessage,
       field
     };
   }
@@ -123,9 +128,13 @@ export const register = async (email, password) => {
     };
   } catch (error) {
     let errorMessage = AUTH_ERRORS.emailExists;
+    let userMessage = null;
     
     if (error.message) {
       errorMessage = error.message;
+      if (errorMessage === 'Server Error') {
+        userMessage = 'Ошибка сервера';
+      }
     } else if (error.data?.message) {
       errorMessage = error.data.message;
     }
@@ -137,6 +146,7 @@ export const register = async (email, password) => {
     return {
       success: false,
       error: errorMessage,
+      userMessage: userMessage,
       field
     };
   }
@@ -149,6 +159,15 @@ export const checkAuth = () => {
   
   if (!token || !email) {
     return { isAuthenticated: false };
+  }
+  
+  if (authTime) {
+    const timePassed = Date.now() - parseInt(authTime);
+    const sixDaysInMs = 6 * 24 * 60 * 60 * 1000;
+
+    if (timePassed > sixDaysInMs) {
+      console.warn('Токен скоро истекает');
+    }
   }
   
   return {
